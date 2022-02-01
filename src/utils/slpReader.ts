@@ -290,6 +290,16 @@ export function parseMessage(command: Command, payload: Uint8Array): EventPayloa
           .shift();
         const connectCode = connectCodeString ? toHalfwidth(connectCodeString) : "";
 
+        const slippiUidLength = 0x1d;
+        const slippiUidOffset = playerIndex * slippiUidLength;
+        const slippiUidStart = 0x249 + slippiUidOffset;
+        const slippiUidBuf = payload.slice(slippiUidStart, slippiUidStart + slippiUidLength);
+        const slippiUidString = iconv
+          .decode(slippiUidBuf as Buffer, "utf8")
+          .split("\0")
+          .shift();
+        const slippiUid = slippiUidString ?? "";
+
         const offset = playerIndex * 0x24;
         return {
           playerIndex: playerIndex,
@@ -303,6 +313,7 @@ export function parseMessage(command: Command, payload: Uint8Array): EventPayloa
           nametag: nametag,
           displayName: displayName,
           connectCode: connectCode,
+          slippiUid: slippiUid,
         };
       };
       return {

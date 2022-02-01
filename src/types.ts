@@ -20,6 +20,7 @@ export interface PlayerType {
   nametag: string | null;
   displayName: string;
   connectCode: string;
+  slippiUid: string;
 }
 
 export enum GameMode {
